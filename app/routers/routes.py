@@ -14,13 +14,25 @@ from app.models import KP
 from app.transformers import decode, encode, encode_from_path
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
 
 router = APIRouter()
 
-
 @router.get("/decode")
-async def decode_instance(x0: float, x1: float) -> JSONResponse:
+async def decode_instance(
+    x0: float = Query(..., description="First coordinate (x0)"),
+    x1: float = Query(..., description="Second coordinate (x1)"),
+) -> JSONResponse:
+    """Reconstructs a Knapsack Instance from a 2D vector
+    
+
+    Args:
+        - x0 (float): First coordinate
+        - x1 (float): Second coordinate
+
+    Returns:
+        JSONResponse: Knapsack instance
+    """
     instance = await decode(x0, x1)
     if any(x < 0 for x in instance.variables):
         return JSONResponse(
@@ -41,6 +53,20 @@ async def decode_instance(x0: float, x1: float) -> JSONResponse:
     return JSONResponse(
         content={"encoding": (x0, x1), "instance": jsonable_encoder(instance)}
     )
+
+
+@router.post("/encode")
+async def encode_instance(instance: KP):
+    """Encodes a Knapsack Instance into a 2D vector
+
+    Args:
+        instance (KP): Knapsack Model
+
+    Returns:
+        JSONResponse: Where content is tuple with the values (x0, x1)
+    """
+    encoding, status = await encode(instance)
+    return JSONResponse(content={"instance": instance, "encoding": encoding})
 
 
 @router.get("/encode/filename")
@@ -64,16 +90,3 @@ async def encode_from_file(path: str):
         )
     return JSONResponse(content={"instance": path, "encoding": encoding})
 
-
-@router.post("/encode")
-async def encode_instance(instance: KP):
-    """Encodes a Knapsack Instance into a 2D vector
-
-    Args:
-        instance (KP): Knapsack Model
-
-    Returns:
-        JSONResponse: Where content is tuple with the values (x0, x1)
-    """
-    encoding, status = await encode(instance)
-    return JSONResponse(content={"instance": instance, "encoding": encoding})
