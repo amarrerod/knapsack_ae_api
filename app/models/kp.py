@@ -11,17 +11,30 @@
 '''
 
 from pydantic import BaseModel
-from typing import Optional
 import numpy as np
 
 class KP(BaseModel):
+    """Knapsack Instance Model
+
+        - size (int): Number of variables of the instance. It's defined as 2N+1 since
+            the instance contains N pairs of weights and profirts (w_i, p_i) plus the capacity (Q)
+        - variables (list[int]): Variables of the instance
+    """
     size: int = 0
-    variables: Optional[list[int]] = None
+    variables: list[int]
 
 
 
 def read_instance(path: str) -> KP:
+    """Reads and instance from the file system
+
+    Args:
+        path (str): Path where the instance is stored
+
+    Returns:
+        KP: Returns a KP object
+    """
     content = np.loadtxt(path, dtype=int)
     variables = [content[0][1], *content[1:].flatten()]
-    return KP(size=content[0][0], variables=variables)
+    return KP(size=(content[0][0] * 2)+ 1, variables=variables)
 

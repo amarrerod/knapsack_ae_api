@@ -17,7 +17,7 @@ import numpy as np
 
 async def decode(x0: float, x1: float):
     variables = __decode_instances(np.asarray([x0, x1]).reshape(1, -1))
-    return KP(size=(len((variables // 2) - 1)), variables=variables)
+    return KP(size=len(variables), variables=variables)
 
 async def encode(instance: KP):
     return (__encode_instances(np.asarray(instance.variables).reshape(1, -1)), 200)

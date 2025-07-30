@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # -*-coding:utf-8 -*-
-'''
+"""
 @File    :   decode.py
 @Time    :   2025/07/30 11:02:33
-@Author  :   Alejandro Marrero 
+@Author  :   Alejandro Marrero
 @Version :   1.0
 @Contact :   amarrerd@ull.edu.es
 @License :   (C)Copyright 2025, Alejandro Marrero
 @Desc    :   None
-'''
+"""
 
 from app.models import KP
 from app.transformers import decode, encode, encode_from_path
@@ -18,24 +18,34 @@ from fastapi import APIRouter
 
 router = APIRouter()
 
+
 @router.get("/decode")
 async def decode_instance(x0: float, x1: float) -> JSONResponse:
     instance = await decode(x0, x1)
     if any(x < 0 for x in instance.variables):
-        return JSONResponse(status_code=406, content={"error": f"Instance with encoding ({x0}, {x1}) does not exists in the space. Encoder predicted negative profits or weights"})
-    if instance.size // 2 != 0:
+        return JSONResponse(
+            status_code=406,
+            content={
+                "error": f"Instance with encoding ({x0}, {x1}) does not exists in the space.Encoder predicted negative profits or weights",
+                "instance": jsonable_encoder(instance),
+            },
+        )
+    if instance.size // 2 == 0:
         return JSONResponse(
             status_code=406,
             content={
                 "error": f"""Instance with encoding ({x0}, {x1}) does not exists in the space, odd number of variables found. 
-                Note that a KP instance must have a even number of variables. In particular, 2N."""
+                            Note that a KP instance must have a even number of variables. In particular, 2N (weights and profits) plus capacity (Q)."""
             },
         )
-    return JSONResponse(content={"encoding": (x0, x1), "instance": jsonable_encoder(instance)})
+    return JSONResponse(
+        content={"encoding": (x0, x1), "instance": jsonable_encoder(instance)}
+    )
+
 
 @router.get("/encode/filename")
 async def encode_from_file(path: str):
-    """Encodes a Knapsack Instance into a 2D vector 
+    """Encodes a Knapsack Instance into a 2D vector
     from a filename in the machine
 
     Args:
@@ -67,5 +77,3 @@ async def encode_instance(instance: KP):
     """
     encoding, status = await encode(instance)
     return JSONResponse(content={"instance": instance, "encoding": encoding})
-
-

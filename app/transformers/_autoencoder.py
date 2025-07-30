@@ -29,4 +29,8 @@ def __encode_instances(X: npt.ArrayLike):
 def __decode_instances(X: npt.ArrayLike):
     scaler = joblib.load(SCALER_FN)
     decoder = keras.models.load_model(DECODER)
-    return scaler.inverse_transform(decoder(X)).astype(np.int32)[0]
+    variables =  scaler.inverse_transform(decoder(X))[0]
+    idx = np.argmin((variables[1:]<0) == False) + 1
+    return variables[:idx].astype(np.int32)
+    
+
