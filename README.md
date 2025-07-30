@@ -1,5 +1,5 @@
 
-# 🎒 Knapsack Autoencoder API - FastAPI + Keras + Tuning 🚀
+# 🎒 Knapsack Autoencoder API - FastAPI + Keras 🚀
 
 Encode and decode variable-sized **0/1 Knapsack Problem** instances (from 50 to 1000 items) using a state-of-the-art **Autoencoder** served via **FastAPI**.
 
