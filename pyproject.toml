@@ -1,0 +1,14 @@
+[project]
+name = "knapsack-ae-api"
+version = "0.1.0"
+description = "API to expose a Variable Size [50-1000] Knapsack Autoencoder"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi[standard]>=0.116.1",
+    "joblib>=1.5.1",
+    "keras>=3.11.0",
+    "scikit-learn>=1.7.1",
+    "tensorflow>=2.20.0rc0",
+    "uvicorn>=0.35.0",
+]
