@@ -36,7 +36,8 @@ def __decode_instances(X : tuple[float, float]):
     scaler = joblib.load(SCALER_FN)
     decoder = keras.models.load_model(DECODER)
     variables =  scaler.inverse_transform(decoder(_X))[0]
-    idx = np.argmin((variables[1:]<0) == False) + 1
+    mask = variables[1:] >= 0
+    idx = np.argmin(mask) + 1
     return variables[:idx].astype(np.int32)
     
 
