@@ -14,21 +14,22 @@ import joblib
 import keras
 from pathlib import Path
 import numpy as np
+from keras.utils import pad_sequences
 
 SCALER_FN = Path(__file__).with_name("N_variable_scaler.sav")
 ENCODER = Path(__file__).with_name("best_kp_AE_N_variable_2D_tuned_encoder.keras")
 DECODER = Path(__file__).with_name("best_kp_AE_N_variable_2D_tuned_decoder.keras")
 MAXLEN = 2001
 
-def __encode_instances(X: list[int]):
+def __encode_instances(X: list[list[int]]):
     _X = np.asarray(X)
-    if len(_X) < MAXLEN:
-        _X = np.pad(_X, (0, MAXLEN - len(_X)), "constant")
-    _X = _X.reshape(1, -1)
+    _X = pad_sequences(_X, maxlen=MAXLEN, dtype="int32", padding="post", value=0)
+    if len(_X) == 1:
+        _X = _X.reshape(1, -1)
     scaler = joblib.load(SCALER_FN)
     encoder = keras.models.load_model(ENCODER)
-    x, y = encoder(scaler.transform(_X))[0]
-    return (float(x), float(y))
+    encodings = encoder(scaler.transform(_X)).numpy().tolist()
+    return encodings
 
 def __decode_instances(X : tuple[float, float]):
     _X = np.asarray(X).reshape(1, -1)

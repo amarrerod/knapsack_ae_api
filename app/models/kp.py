@@ -23,7 +23,8 @@ class KP(BaseModel):
     size: int = 0
     variables: list[int]
 
-
+class KPCollection(BaseModel):
+    instances: list[KP] = list()
 
 def read_instance(path: str) -> KP:
     """Reads and instance from the file system

@@ -10,7 +10,7 @@
 @Desc    :   None
 '''
 
-from .routes import router, decode_instance, encode_instance
+from .routes import router, decode_instance, encode_instances
 
 
-__all__ = ["router", "decode_instance", "encode_instance"]
+__all__ = ["router", "decode_instance", "encode_instances"]

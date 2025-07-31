@@ -79,9 +79,8 @@ docker run -d -p 8000:80 amarrerd/knapsack_ae_api:0.0.1
 ## 🧠 Model Info
 
 * Encoder/decoder trained using **Keras Functional API**.
-* **Latent vector size** dynamically selected via hyperparameter tuning.
+* **Latent vector size** 2d.
 * **Trained dataset** includes 100,000+ synthetic knapsack instances.
-* **Performance-optimized** using learning rate warmup and cosine decay.
 
 ---
 

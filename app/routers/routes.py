@@ -10,7 +10,7 @@
 @Desc    :   None
 """
 
-from app.models import KP
+from app.models import KPCollection
 from app.transformers import decode, encode, encode_from_path
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
@@ -56,17 +56,17 @@ async def decode_instance(
 
 
 @router.post("/encode")
-async def encode_instance(instance: KP):
-    """Encodes a Knapsack Instance into a 2D vector
+async def encode_instances(collection: KPCollection):
+    """Encodes a set of Knapsack Instances into a 2D vector
 
     Args:
-        instance (KP): Knapsack Model
+        Iterable of instances (KP): Knapsack Model
 
     Returns:
-        JSONResponse: Where content is tuple with the values (x0, x1)
+        JSONResponse: Where content is the instances are encoded into tuples with the values (x0, x1)
     """
-    encoding, status = await encode(instance)
-    return JSONResponse(content={"instance": instance, "encoding": encoding})
+    encoding, status = await encode(collection)
+    return JSONResponse(content={"collection": jsonable_encoder(collection), "encodings": encoding})
 
 
 @router.get("/encode/filename")

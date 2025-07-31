@@ -10,6 +10,6 @@
 @Desc    :   None
 '''
 
-from .kp import KP, read_instance
+from .kp import KP, KPCollection, read_instance
 
-__all__ = ["KP", "read_instance"]
+__all__ = ["KP", "KPCollection", "read_instance"]
