@@ -25,12 +25,19 @@ This project combines the flexibility of a custom-trained **Keras Autoencoder**,
 
 ### `POST /encode`
 
-Encode a knapsack instance to its latent representation.
+Encode a collection of knapsack instances to its latent representation.
 
 ```json
 {
-  "size": integer (2N+1),
-  "variables": [w0,p0,w1,p1,....,wn-1,pn-1],
+  "collection": {
+    "instances": []
+  },
+  "encodings": [
+    [
+      9.996188163757324,
+      14.908147811889648
+    ]
+  ]
 }
 ```
 
